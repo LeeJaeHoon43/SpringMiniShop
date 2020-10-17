@@ -5,5 +5,7 @@
 <configuration>
 	<mappers>
 		<mapper resource="mappers/testMapper.xml"/>
+		<mapper resource="mappers/memberMapper.xml"/>
+		<mapper resource="mappers/adminMapper.xml"/>		
 	</mappers>
 </configuration>

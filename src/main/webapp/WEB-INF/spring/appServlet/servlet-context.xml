@@ -23,6 +23,12 @@
 	
 	<context:component-scan base-package="com.ljh.controller" />
 	
-	
+	<beans:bean id="AdminInterceptor" class="com.ljh.interceptor.AdminInterceptor"/>
+	<interceptors>
+		<interceptor>
+			<mapping path="/admin/**"/>
+			<beans:ref bean="AdminInterceptor"/>
+		</interceptor>
+	</interceptors>
 	
 </beans:beans>

@@ -9,9 +9,6 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-	
-	
 	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
         <property value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" name="driverClassName"/>
         <property value="jdbc:log4jdbc:oracle:thin:@localhost:1521/XEPDB1" name="url"/>
@@ -19,17 +16,19 @@
         <property value="mytest" name="password"/>
     </bean>
    
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-         <property name="dataSource" ref="dataSource"></property>
-         <property name="configLocation" value="classpath:/mybatis-config.xml"></property>
-         <property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"/>
-    </bean>
-    
-    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
-    </bean>
+    <!-- SqlSessionFactory 객체 설정 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" /> 
+		<property name="mapperLocations" value="classpath:/mappers/*Mapper.xml" />
+	</bean>
+	
+	<!-- SqlSession Template 설정 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />	
+	</bean>
     
     <context:component-scan base-package="com.ljh.domain"/>
     <context:component-scan base-package="com.ljh.persistence"/>
     <context:component-scan base-package="com.ljh.service"/>
+
 </beans>
