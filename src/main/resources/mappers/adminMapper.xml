@@ -6,4 +6,41 @@
 		SELECT level, cateName, cateCode, cateCodeRef FROM goods_category
 		START WITH cateCodeRef IS NULL CONNECT BY PRIOR cateCode = cateCodeRef
 	</select>
+	
+	<insert id="register">
+	 	INSERT INTO tbl_goods(gdsNum, gdsName, cateCode, gdsPrice, gdsStock, gdsDes)
+	    VALUES(tbl_goods_seq.nextval, #{gdsName}, #{cateCode}, #{gdsPrice}, #{gdsStock}, #{gdsDes})
+	</insert>
+	
+	<select id="goodslist" resultType="com.ljh.domain.GoodsVO">
+	 	SELECT gdsNum, gdsName, cateCode, gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
+	    FROM tbl_goods
+	    ORDER BY gdsNum DESC
+	</select>
+	
+	<!-- 상품 조회. 
+	<select id="goodsView" resultType="com.ljh.domain.GoodsVO">
+		SELECT gdsNum, gdsName, cateCode, gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
+	    FROM tbl_goods
+	    WHERE gdsNum = #{gdsNum}
+	</select>
+	-->
+	
+	<!-- 상품 조회 + 카테고리 조인 -->
+	<select id="goodsView" resultType="com.ljh.domain.GoodsViewVO">
+	 	SELECT g.gdsNum, g.gdsName, g.cateCode, c.cateCodeRef, c.cateName, gdsPrice, gdsStock, gdsDes, gdsImg, gdsDate
+	    FROM tbl_goods g
+	   	INNER JOIN goods_category c
+	    ON g.cateCode = c.cateCode          
+	    WHERE g.gdsNum = #{gdsNum}
+	</select>
+	
+	<update id="goodsModify">
+		UPDATE tbl_goods SET gdsName = #{gdsName}, cateCode = #{cateCode}, gdsPrice = #{gdsPrice}, gdsStock = #{gdsStock}, gdsDes = #{gdsDes}
+		WHERE gdsNum = ${gdsNum}
+	</update>
+	
+	<delete id="goodsDelete">
+		DELETE tbl_goods WHERE gdsNum = #{gdsNum}
+	</delete>
 </mapper>

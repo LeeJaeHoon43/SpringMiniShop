@@ -8,7 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import com.ljh.domain.CategoryVO;
+import com.ljh.domain.GoodsVO;
+import com.ljh.domain.GoodsViewVO;
 import com.ljh.service.AdminService;
 import net.sf.json.JSONArray;
 
@@ -33,5 +36,55 @@ public class AdminController {
 		List<CategoryVO> category = null;
 		category = adminService.category();
 		model.addAttribute("category", JSONArray.fromObject(category));
+	}
+	
+	// 상품 등록 post.
+	@RequestMapping(value = "/goods/register", method = RequestMethod.POST)
+	public String postGoodsRegister(GoodsVO vo) throws Exception{
+		adminService.register(vo);
+		return "redirect:/admin/index";
+	}
+	
+	// 상품 목록 페이지.
+	@RequestMapping(value = "/goods/list", method = RequestMethod.GET)
+	public void getGoodsList(Model model) throws Exception{
+		logger.info("Get Goods List");
+		List<GoodsVO> list = adminService.goodslist();
+		model.addAttribute("list", list);
+	}
+	
+	// 상품 조회.
+	@RequestMapping(value = "/goods/view", method = RequestMethod.GET)
+	public void getGoodsview(@RequestParam("n") int gdsNum, Model model) throws Exception{
+		logger.info("get goods view");
+		GoodsViewVO goods = adminService.goodsView(gdsNum);
+		model.addAttribute("goods", goods);
+	}
+	
+	// 상품 수정 페이지.
+	@RequestMapping(value = "/goods/modify", method = RequestMethod.GET)
+	public void getGoodsModify(@RequestParam("n") int gdsNum, Model model) throws Exception{
+		logger.info("get goods modify");
+		GoodsViewVO goods = adminService.goodsView(gdsNum);
+		model.addAttribute("goods", goods);
+		List<CategoryVO> category = null;
+		category = adminService.category();
+		model.addAttribute("category", JSONArray.fromObject(category));
+	}
+	
+	// 상품 수정.
+	@RequestMapping(value = "/goods/modify", method = RequestMethod.POST)
+	public String postGoodsModify(GoodsVO vo) throws Exception{
+		logger.info("post goods modify");
+		adminService.goodsModify(vo);
+		return "redirect:/admin/index";
+	}
+	
+	// 상품 삭제.
+	@RequestMapping(value = "/goods/delete", method = RequestMethod.POST)
+	public String postGoodsDelete(@RequestParam("n") int gdsNum) throws Exception{
+		logger.info("post goods delete");
+		adminService.goodsDelete(gdsNum);
+		return "redirect:/admin/index";
 	}
 }
