@@ -74,8 +74,9 @@ public class AdminController {
 	
 	// 상품 수정.
 	@RequestMapping(value = "/goods/modify", method = RequestMethod.POST)
-	public String postGoodsModify(GoodsVO vo) throws Exception{
+	public String postGoodsModify(GoodsVO vo, @RequestParam("n") int gdsNum) throws Exception{
 		logger.info("post goods modify");
+		vo.setGdsNum(gdsNum);
 		adminService.goodsModify(vo);
 		return "redirect:/admin/index";
 	}
