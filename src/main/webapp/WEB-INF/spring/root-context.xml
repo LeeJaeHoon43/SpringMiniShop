@@ -30,5 +30,6 @@
     <context:component-scan base-package="com.ljh.domain"/>
     <context:component-scan base-package="com.ljh.persistence"/>
     <context:component-scan base-package="com.ljh.service"/>
+    <context:component-scan base-package="com.ljh.utils"/>
 
 </beans>
