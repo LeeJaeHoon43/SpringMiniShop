@@ -51,4 +51,58 @@
 		UPDATE tbl_reply SET repCon = #{repCon} WHERE repNum = #{repNum} AND userId = #{userId}
 	</update>
 	
+	<!-- 카트 담기 -->
+	<insert id="addCart">
+		INSERT INTO tbl_cart (cartNum, userId, gdsNum, cartStock)
+	    VALUES (tbl_cart_seq.nextval, #{userId}, #{gdsNum}, #{cartStock})
+	</insert>
+	
+	<!-- 카트 목록 -->
+	<select id="cartList" resultType="com.ljh.domain.CartListVO">
+		SELECT row_number() over(order by c.cartNum desc) as num, c.cartNum, c.userId, c.gdsNum, c.cartStock, c.addDate, g.gdsName, g.gdsPrice, g.gdsThumbImg
+	 	FROM tbl_cart c
+	    INNER JOIN tbl_goods g
+	    ON c.gdsNum = g.gdsNum   
+	    WHERE c.userId = #{userId}
+	</select>
+	
+	<!-- 카트 삭제 -->
+	<delete id="deleteCart">
+		DELETE tbl_cart WHERE cartNum = #{cartNum} AND userId = #{userId}
+	</delete>
+	
+	<!-- 주문 정보 -->
+	<insert id="orderInfo">
+		INSERT INTO tbl_order(orderId, userId, orderRec, userAddr1, userAddr2, userAddr3, orderPhon, amount)
+	    VALUES(#{orderId}, #{userId}, #{orderRec}, #{userAddr1}, #{userAddr2}, #{userAddr3}, #{orderPhon}, #{amount})
+	</insert>
+	   
+	<!-- 주문 상세 정보 --> 
+	<insert id="orderInfo_Details">
+		INSERT INTO tbl_order_details(orderDetailsNum, orderId, gdsNum, cartStock)
+	    SELECT tbl_order_details_seq.nextval, #{orderId}, gdsNum, cartStock FROM tbl_cart   
+	</insert> 
+	
+	<!-- 카트 비우기 -->
+	<delete id="cartAllDelete">
+		DELETE tbl_cart WHERE userId = #{userId}
+	</delete>
+	
+	<!-- 특정 유저의 주문 목록 -->
+	<select id="orderList" resultType="com.ljh.domain.OrderVO">
+		SELECT orderId, userId, orderRec, userAddr1, userAddr2, userAddr3, orderPhon, amount, orderDate
+	 	FROM tbl_order 
+	    WHERE userId = #{userId}
+	</select>
+	
+	<!-- 특정 주문 목록 -->
+	<select id="orderView" resultType="com.ljh.domain.OrderListVO">
+		SELECT o.orderId, o.userId, o.orderRec, o.userAddr1, o.userAddr2, o.userAddr3, o.orderPhon, o.amount, o.orderDate, d.orderDetailsNum, d.gdsNum, d.cartStock, g.gdsName, g.gdsThumbImg, g.gdsPrice
+	 	FROM tbl_order o
+	    INNER JOIN tbl_order_details d
+	    ON o.orderId = d.orderId
+	    INNER JOIN tbl_goods g
+	    ON d.gdsNum = g.gdsNum
+	    WHERE o.userId = #{userId} AND o.orderId = #{orderId}
+	</select>
 </mapper>

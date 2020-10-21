@@ -5,7 +5,12 @@ import java.util.List;
 import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import com.ljh.domain.CartListVO;
+import com.ljh.domain.CartVO;
 import com.ljh.domain.GoodsViewVO;
+import com.ljh.domain.OrderDetailVO;
+import com.ljh.domain.OrderListVO;
+import com.ljh.domain.OrderVO;
 import com.ljh.domain.ReplyListVO;
 import com.ljh.domain.ReplyVO;
 
@@ -66,5 +71,45 @@ public class ShopDAOImpl implements ShopDAO{
 	@Override
 	public void modifyReply(ReplyVO reply) throws Exception {
 		sqlSession.update(namespace + ".modifyReply", reply);
+	}
+
+	@Override
+	public void addCart(CartVO cart) throws Exception {
+		sqlSession.insert(namespace + ".addCart", cart);
+	}
+
+	@Override
+	public List<CartListVO> cartList(String userId) throws Exception {
+		return sqlSession.selectList(namespace + ".cartList", userId);
+	}
+
+	@Override
+	public void deleteCart(CartVO cart) throws Exception {
+		sqlSession.delete(namespace + ".deleteCart", cart);
+	}
+
+	@Override
+	public void orderInfo(OrderVO order) throws Exception {
+		sqlSession.insert(namespace + ".orderInfo", order);
+	}
+
+	@Override
+	public void orderInfo_Details(OrderDetailVO orderDetail) throws Exception {
+		sqlSession.insert(namespace + ".orderInfo_Details", orderDetail);
+	}
+
+	@Override
+	public void cartAllDelete(String userId) throws Exception {
+		sqlSession.delete(namespace + ".cartAllDelete", userId);
+	}
+
+	@Override
+	public List<OrderVO> orderList(OrderVO order) throws Exception {
+		return sqlSession.selectList(namespace + ".orderList", order);
+	}
+
+	@Override
+	public List<OrderListVO> orderView(OrderVO order) throws Exception {
+		return sqlSession.selectList(namespace + ".orderView", order);
 	}
 }

@@ -3,7 +3,13 @@ package com.ljh.service;
 import java.util.List;
 import javax.inject.Inject;
 import org.springframework.stereotype.Service;
+
+import com.ljh.domain.CartListVO;
+import com.ljh.domain.CartVO;
 import com.ljh.domain.GoodsViewVO;
+import com.ljh.domain.OrderDetailVO;
+import com.ljh.domain.OrderListVO;
+import com.ljh.domain.OrderVO;
 import com.ljh.domain.ReplyListVO;
 import com.ljh.domain.ReplyVO;
 import com.ljh.persistence.ShopDAO;
@@ -56,5 +62,45 @@ public class ShopServiceImpl implements ShopService{
 	@Override
 	public void modifyReply(ReplyVO reply) throws Exception {
 		dao.modifyReply(reply);
+	}
+
+	@Override
+	public void addCart(CartVO cart) throws Exception {
+		dao.addCart(cart);
+	}
+
+	@Override
+	public List<CartListVO> cartList(String userId) throws Exception {
+		return dao.cartList(userId);
+	}
+
+	@Override
+	public void deleteCart(CartVO cart) throws Exception {
+		dao.deleteCart(cart);
+	}
+
+	@Override
+	public void orderInfo(OrderVO order) throws Exception {
+		dao.orderInfo(order);
+	}
+
+	@Override
+	public void orderInfo_Details(OrderDetailVO orderDetail) throws Exception {
+		dao.orderInfo_Details(orderDetail);
+	}
+
+	@Override
+	public void cartAllDelete(String userId) throws Exception {
+		dao.cartAllDelete(userId);
+	}
+
+	@Override
+	public List<OrderVO> orderList(OrderVO order) throws Exception {
+		return dao.orderList(order);
+	}
+
+	@Override
+	public List<OrderListVO> orderView(OrderVO order) throws Exception {
+		return dao.orderView(order);
 	}
 }
