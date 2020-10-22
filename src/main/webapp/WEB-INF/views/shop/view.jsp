@@ -435,7 +435,7 @@ function replyList() {
 							<fmt:formatNumber pattern="###,###,###" value="${view.gdsStock}" />
 							EA
 						</p>
-
+						<c:if test="${view.gdsStock != 0}">
 						<p class="cartStock">
 							<span>구입 수량</span>
 							<button type="button" class="plus">+</button>
@@ -494,6 +494,10 @@ function replyList() {
 							    });
 							</script>
 						</p>
+						</c:if>
+						<c:if test="${view.gdsStock == 0}">
+							<p>상품 수량이 부족합니다.</p>						
+						</c:if>
 					</div>
 					<div class="gdsDes">${view.gdsDes}</div>
 				</div>

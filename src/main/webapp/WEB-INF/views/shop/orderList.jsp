@@ -2,9 +2,16 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
 <html>
 <head>
-<title>Shop</title>
+<meta charset="UTF-8">
+<title>상품 목록</title>
+<script src="/resources/jquery/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="/resources/bootstrap/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/resources/bootstrap/bootstrap-theme.min.css">
+<script src="/resources/bootstrap/bootstrap.min.js"></script>
 <style>
 body {
 	margin: 0;
@@ -194,7 +201,6 @@ section#content .orderList span {
 				<%@ include file="../include/header.jsp"%>
 			</div>
 		</header>
-
 		<nav id="nav">
 			<div id="nav_box">
 				<%@ include file="../include/nav.jsp"%>
@@ -223,6 +229,8 @@ section#content .orderList span {
 											value="${orderList.amount}" />
 										원
 									</p>
+									<p>
+										<span>상태</span>${orderList.delivery}</p>
 								</div>
 							</li>
 						</c:forEach>

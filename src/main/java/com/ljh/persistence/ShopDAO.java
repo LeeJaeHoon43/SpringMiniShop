@@ -3,6 +3,7 @@ package com.ljh.persistence;
 import java.util.List;
 import com.ljh.domain.CartListVO;
 import com.ljh.domain.CartVO;
+import com.ljh.domain.GoodsVO;
 import com.ljh.domain.GoodsViewVO;
 import com.ljh.domain.OrderDetailVO;
 import com.ljh.domain.OrderListVO;

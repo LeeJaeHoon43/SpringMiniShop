@@ -22,6 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ljh.domain.CategoryVO;
 import com.ljh.domain.GoodsVO;
 import com.ljh.domain.GoodsViewVO;
+import com.ljh.domain.OrderListVO;
+import com.ljh.domain.OrderVO;
+import com.ljh.domain.ReplyListVO;
+import com.ljh.domain.ReplyVO;
 import com.ljh.service.AdminService;
 import com.ljh.utils.UploadFileUtils;
 import net.sf.json.JSONArray;
@@ -162,10 +166,10 @@ public class AdminController {
 			String fileUrl = "/ckUpload/" + uid + "_" + fileName;  // 작성화면.
 
 			// 업로드시 메시지 출력.
-//			printWriter.println("<script type='text/javascript'>"
-//					+ "window.parent.CKEDITOR.tools.callFunction("
-//					+ callback+",'"+ fileUrl+"','이미지를 업로드하였습니다.')"
-//					+"</script>");
+			//			printWriter.println("<script type='text/javascript'>"
+			//					+ "window.parent.CKEDITOR.tools.callFunction("
+			//					+ callback+",'"+ fileUrl+"','이미지를 업로드하였습니다.')"
+			//					+"</script>");
 			printWriter.println("{\"filename\" : \""+fileName+"\", \"uploaded\" : 1, \"url\":\""+fileUrl+"\"}");
 			printWriter.flush();
 
@@ -181,4 +185,54 @@ public class AdminController {
 		} 
 		return;	
 	}
+
+	// 주문 목록.
+	@RequestMapping(value = "/shop/orderList", method = RequestMethod.GET)
+	public void getOrderList(Model model) throws Exception{
+		logger.info("get order list");
+		List<OrderVO> orderList = adminService.orderList();
+		model.addAttribute("orderList", orderList);
+	}
+
+	// 주문 상세 목록.
+	@RequestMapping(value = "/shop/orderView", method = RequestMethod.GET)
+	public void getOrderList(@RequestParam("n") String orderId, OrderVO order, Model model) throws Exception{
+		logger.info("get order view");
+		order.setOrderId(orderId);
+		List<OrderListVO> orderView = adminService.orderView(order);
+		model.addAttribute("orderView", orderView);
+	}
+
+	// 주문 상세 목록 - 상태 변경.
+	@RequestMapping(value = "/shop/orderView", method = RequestMethod.POST)
+	public String delivery(OrderVO order) throws Exception{
+		logger.info("post order view");
+		adminService.delivery(order);
+
+		List<OrderListVO> orderView = adminService.orderView(order);
+		GoodsVO goods = new GoodsVO();
+
+		for (OrderListVO i : orderView) {
+			goods.setGdsNum(i.getGdsNum());
+			goods.setGdsStock(i.getCartStock());
+			adminService.changeStock(goods);
+		}
+		return "redirect:/admin/shop/orderView?n=" + order.getOrderId();
+	}
+
+	// 모든 댓글 목록.
+	@RequestMapping(value = "/shop/allReply", method = RequestMethod.GET)
+	public void getAllReply(Model model) throws Exception{
+		logger.info("get all reply");
+		List<ReplyListVO> reply = adminService.allReply();
+		model.addAttribute("reply", reply);
+	}
+
+	// 모든 댓글 삭제.
+	@RequestMapping(value = "/shop/allReply", method = RequestMethod.POST)
+	public String postAllReply(ReplyVO reply) throws Exception {
+		logger.info("post all reply");
+		adminService.deleteReply(reply.getRepNum());
+		return "redirect:/admin/shop/allReply";
+	}	
 }

@@ -37,4 +37,54 @@
 	<delete id="goodsDelete">
 		DELETE tbl_goods WHERE gdsNum = #{gdsNum}
 	</delete>
+	
+	<!-- 모든 유저의 주문 목록 -->
+	<select id="orderList" resultType="com.ljh.domain.OrderVO">
+		SELECT orderId, userId, orderRec, userAddr1, userAddr2, userAddr3, orderPhon, amount, orderDate, delivery
+	 	FROM tbl_order
+	</select>
+	
+	<!-- 특정 주문 목록 -->
+	<select id="orderView" resultType="com.ljh.domain.OrderListVO">
+		SELECT o.orderId, o.userId, o.orderRec, o.userAddr1, o.userAddr2, o.userAddr3, o.orderPhon, o.amount, o.orderDate, o.delivery, d.orderDetailsNum, d.gdsNum, d.cartStock, g.gdsName, g.gdsThumbImg, g.gdsPrice
+	 	FROM tbl_order o
+	    INNER JOIN tbl_order_details d
+	   	ON o.orderId = d.orderId
+	    INNER JOIN tbl_goods g
+	    ON d.gdsNum = g.gdsNum
+	    WHERE o.orderId = #{orderId}
+	</select>
+	
+	<!-- 배송 상태 -->
+	<update id="delivery">
+		UPDATE tbl_order
+	    SET delivery = #{delivery}
+	 	WHERE orderId = #{orderId}
+	</update>
+	
+	<!-- 상품 수량 조절 -->
+	<update id="changeStock">
+		UPDATE tbl_goods SET gdsStock = gdsStock - #{gdsStock} WHERE gdsNum = #{gdsNum}
+	</update>
+	
+	<!-- 상품 수량 조절 보조-->
+	<select id="ChangeStock_sub" resultType="com.ljh.domain.OrderDetailVO">
+		SELECT orderId, gdsNum, cartStock
+		FROM tbl_order_details
+    	WHERE orderId = #{orderId}
+	</select>
+	
+	<!--  모든 소감(댓글) -->
+	<select id="allReply" resultType="com.ljh.domain.ReplyListVO">
+		SELECT r.gdsNum, r.userId, r.repNum, r.repCon, r.repDate, m.userName
+	 	FROM tbl_reply r
+	    INNER JOIN tbl_member m
+	    ON r.userId = m.userId
+	</select>
+	
+	<!-- 소감(댓글) 지우기 -->
+	<delete id="deleteReply">
+		DELETE tbl_reply WHERE repNum = #{repNum}
+	</delete>
+	
 </mapper>

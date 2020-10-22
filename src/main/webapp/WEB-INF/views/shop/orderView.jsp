@@ -2,9 +2,16 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
 <html>
 <head>
-<title>Shop</title>
+<meta charset="UTF-8">
+<title>상품 목록</title>
+<script src="/resources/jquery/jquery-3.3.1.min.js"></script>
+<link rel="stylesheet" href="/resources/bootstrap/bootstrap.min.css">
+<link rel="stylesheet"
+	href="/resources/bootstrap/bootstrap-theme.min.css">
+<script src="/resources/bootstrap/bootstrap.min.js"></script>
 <style>
 body {
 	margin: 0;
@@ -229,7 +236,6 @@ footer#footer div#footer_box {
 				<%@ include file="../include/header.jsp"%>
 			</div>
 		</header>
-
 		<nav id="nav">
 			<div id="nav_box">
 				<%@ include file="../include/nav.jsp"%>
@@ -240,7 +246,7 @@ footer#footer div#footer_box {
 				<section id="content">
 					<div class="orderInfo">
 						<c:forEach items="${orderView}" var="orderView" varStatus="status">
-
+							<%-- 첫번째 요소만 출력. 주문 상세 페이지에서 중복되는 부분이므로 모두 출력할 필요 없음 --%>
 							<c:if test="${status.first}">
 								<p>
 									<span>수령인</span>${orderView.orderRec}</p>
@@ -254,8 +260,9 @@ footer#footer div#footer_box {
 										value="${orderView.amount}" />
 									원
 								</p>
+								<p>
+									<span>상태</span>${orderView.delivery}</p>
 							</c:if>
-
 						</c:forEach>
 					</div>
 					<ul class="orderView">

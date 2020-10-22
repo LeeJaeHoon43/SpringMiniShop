@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.ljh.domain.CartListVO;
 import com.ljh.domain.CartVO;
+import com.ljh.domain.GoodsVO;
 import com.ljh.domain.GoodsViewVO;
 import com.ljh.domain.OrderDetailVO;
 import com.ljh.domain.OrderListVO;
